@@ -2,6 +2,25 @@
 
 A minimal VS Code extension that lists Azure Storage accounts, picks a table, and renders its entities as either an HTML table (with raw-JSON toggle) or an untitled CSV document.
 
+> Not on the VS Code Marketplace yet — distributed via GitHub Releases.
+
+## Install
+
+Grab the latest `.vsix` from the [Releases page](https://github.com/feferka/simple-azure-table-viewer/releases/latest), then install with:
+
+```bash
+code --install-extension simple-azure-table-viewer-<version>.vsix
+```
+
+Reload the VS Code window after install (`Cmd+Shift+P → Developer: Reload Window`).
+
+One-liner using `curl` (replace `<version>` with the tag, e.g. `0.0.2`):
+
+```bash
+curl -LO https://github.com/feferka/simple-azure-table-viewer/releases/download/v<version>/simple-azure-table-viewer-<version>.vsix \
+  && code --install-extension simple-azure-table-viewer-<version>.vsix
+```
+
 ## Requirements
 
 - VS Code `1.80.0` or newer
