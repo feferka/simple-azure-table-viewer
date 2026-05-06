@@ -1,6 +1,6 @@
-# Azure Table Storage Viewer
+# Simple Azure Table Viewer
 
-A minimal VS Code extension that lists Azure Storage accounts, picks a table, and renders its entities as a sortable table or raw JSON.
+A minimal VS Code extension that lists Azure Storage accounts, picks a table, and renders its entities as either an HTML table (with raw-JSON toggle) or an untitled CSV document.
 
 ## Requirements
 
@@ -19,6 +19,18 @@ A minimal VS Code extension that lists Azure Storage accounts, picks a table, an
 2. Click **Query Azure Table** (or run *Azure Table Storage Viewer: Open* from the Command Palette).
 3. Pick a storage account, then a table.
 4. Results open in a panel with a toggle between **Table** and **Raw JSON** view.
+
+## Configuration
+
+| Setting | Type | Default | Effect |
+| --- | --- | --- | --- |
+| `simpleAzureTableViewer.outputAsCsv` | `boolean` | `false` | When `true`, results open as an untitled `<account>-<table>.csv` document instead of the HTML view. Pairs well with CSV viewer extensions (e.g. **Rainbow CSV**, **Edit csv**) for filtering, sorting, and copying into Excel/Sheets. The document is in-memory and is not saved unless you press `Cmd+S`. |
+
+Toggle via *Settings → search „Simple Azure Table Viewer"* or by editing `settings.json`:
+
+```json
+"simpleAzureTableViewer.outputAsCsv": true
+```
 
 ## How it works
 
@@ -60,7 +72,7 @@ npm run package           # produces .vsix (runs typecheck + bundle:prod)
 To test a local build:
 
 ```bash
-code --install-extension azure-table-storage-viewer-0.0.1.vsix --force
+code --install-extension simple-azure-table-viewer-0.0.2.vsix --force
 ```
 
 Then run *Developer: Reload Window*.
@@ -77,8 +89,12 @@ src/
 │   └── AzureTableTreeProvider.ts   Activity Bar tree
 ├── commands/
 │   └── QueryTableCommand.ts        pick account → pick table → query → render
-└── webview/
-    └── TableWebview.ts             panel with table/JSON toggle (CSP nonce-protected)
+├── model/
+│   └── TableModel.ts               shared columns/rows derivation
+└── output/
+    ├── ResultPresenter.ts          interface implemented by both renderers
+    ├── TableWebview.ts             panel with table/JSON toggle (CSP nonce-protected)
+    └── CsvDocument.ts              untitled <account>-<table>.csv document
 ```
 
 The bundled output is a single `out/extension.js` produced by `esbuild`.

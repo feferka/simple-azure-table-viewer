@@ -3,7 +3,7 @@
   "displayName": "Simple Azure Table Viewer",
   "description": "Lists Azure Storage accounts and tables, then renders entities as a sortable table or raw JSON. Uses the active Azure CLI session.",
   "publisher": "feferka",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "engines": {
     "vscode": "^1.80.0"
@@ -59,6 +59,16 @@
           "name": "Azure Table Storage"
         }
       ]
+    },
+    "configuration": {
+      "title": "Simple Azure Table Viewer",
+      "properties": {
+        "simpleAzureTableViewer.outputAsCsv": {
+          "type": "boolean",
+          "default": false,
+          "description": "Open query results as an untitled CSV document instead of the HTML table view. Useful when a CSV preview/editor extension (e.g. Rainbow CSV, Edit csv) is installed."
+        }
+      }
     }
   },
   "scripts": {

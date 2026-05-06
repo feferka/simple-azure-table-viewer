@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 import { AzureCli, StorageAccount, StorageTable } from '../azure/AzureCli';
-import { TableWebview } from '../webview/TableWebview';
+import { CsvDocument } from '../output/CsvDocument';
+import { ResultPresenter } from '../output/ResultPresenter';
+import { TableWebview } from '../output/TableWebview';
 
 export class QueryTableCommand {
   constructor(private readonly azureCli: AzureCli) {}
@@ -20,18 +22,28 @@ export class QueryTableCommand {
       }
 
       const result = await this.azureCli.queryEntities(account.name, table.name);
-      const webview = new TableWebview(account.name, table.name, result);
+      const presenter = this.buildPresenter(account.name, table.name, result);
 
-      if (webview.isEmpty) {
+      if (presenter.isEmpty) {
         vscode.window.showInformationMessage(`No entities returned for table ${table.name}.`);
         return;
       }
 
-      webview.show();
+      await presenter.show();
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       vscode.window.showErrorMessage(`Azure Table Storage Viewer failed: ${message}`);
     }
+  }
+
+  private buildPresenter(accountName: string, tableName: string, raw: unknown): ResultPresenter {
+    const useCsv = vscode.workspace
+      .getConfiguration('simpleAzureTableViewer')
+      .get<boolean>('outputAsCsv', false);
+
+    return useCsv
+      ? new CsvDocument(accountName, tableName, raw)
+      : new TableWebview(accountName, tableName, raw);
   }
 
   private async pickAccount(): Promise<StorageAccount | undefined> {
