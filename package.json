@@ -1,0 +1,80 @@
+{
+  "name": "simple-azure-table-viewer",
+  "displayName": "Simple Azure Table Viewer",
+  "description": "Lists Azure Storage accounts and tables, then renders entities as a sortable table or raw JSON. Uses the active Azure CLI session.",
+  "publisher": "feferka",
+  "version": "0.0.1",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/feferka/simple-azure-table-viewer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/feferka/simple-azure-table-viewer/issues"
+  },
+  "homepage": "https://github.com/feferka/simple-azure-table-viewer#readme",
+  "keywords": [
+    "azure",
+    "storage",
+    "table",
+    "table storage",
+    "viewer"
+  ],
+  "categories": [
+    "Azure",
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:azureTableViewer.open",
+    "onView:azureTableViewerView"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "azureTableViewer.open",
+        "title": "Azure Table Storage Viewer: Open"
+      },
+      {
+        "command": "azureTableViewer.refresh",
+        "title": "Azure Table Storage Viewer: Refresh"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "azureTableViewer",
+          "title": "AZ Tables",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "azureTableViewer": [
+        {
+          "id": "azureTableViewerView",
+          "name": "Azure Table Storage"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run typecheck && npm run bundle:prod",
+    "typecheck": "tsc -p ./ --noEmit",
+    "compile": "esbuild src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --target=node18 --sourcemap",
+    "bundle:prod": "esbuild src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --target=node18 --minify",
+    "watch": "esbuild src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --target=node18 --sourcemap --watch",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.2",
+    "@types/vscode": "^1.80.0",
+    "@vscode/vsce": "^3.9.1",
+    "esbuild": "^0.28.0",
+    "typescript": "^5.6.0",
+    "vscode": "^1.1.37"
+  }
+}
